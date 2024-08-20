@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QWidget, QGridLayout, QPushButton, QLabel
+from PySide6.QtWidgets import QMainWindow, QWidget, QGridLayout, QPushButton, QLabel, QFileDialog
 from PySide6.QtGui import QAction
 from functools import partial
 from help_dialog import showHelp
@@ -35,7 +35,8 @@ class ImageSaverApp(QMainWindow):
         # 创建按钮并绑定事件
         for position, name in zip(positions, buttonNames):
             button = QPushButton(name)
-            button.clicked.connect(partial(self.loadOrUploadIdCardImage, name))  # 绑定按钮点击事件
+            # 绑定按钮点击事件，使用 partial 传递参数
+            button.clicked.connect(partial(self.loadOrUploadIdCardImage, name))
             layout.addWidget(button, *position)
             self.idCardButtons.append(button)
 
@@ -50,7 +51,10 @@ class ImageSaverApp(QMainWindow):
         # 检查并更新按钮状态
         for button in self.idCardButtons:
             imagePath = self.get_image_path(button.text())
-            button.setEnabled(self.imageProcessor.image_exists(imagePath))
+            button.setEnabled(True)  # 默认启用按钮
+            # 根据图片是否存在更新按钮状态
+            if not self.imageProcessor.image_exists(imagePath):
+                button.setEnabled(True)  # 即使图片不存在，也允许用户点击按钮进行上传
 
     def loadOrUploadIdCardImage(self, buttonName):
         # 加载或上传身份证图片
@@ -58,8 +62,12 @@ class ImageSaverApp(QMainWindow):
         if self.imageProcessor.image_exists(idCardImagePath):
             self.showImageInNewWindow(idCardImagePath)  # 显示已存在的图片
         else:
-            self.imageProcessor.load_and_save_image(self, idCardImagePath)  # 加载并保存新图片
-            self.showImageInNewWindow(idCardImagePath)  # 显示新保存的图片
+            # 弹出文件对话框上传图片
+            fileName, _ = QFileDialog.getOpenFileName(self, '选择图片', '', '图片文件 (*.png *.jpg *.bmp)')
+            if fileName:
+                # 将上传的图片保存到指定路径
+                self.imageProcessor.save_uploaded_image(idCardImagePath, fileName)
+                self.showImageInNewWindow(idCardImagePath)  # 显示新保存的图片
 
     def showImageInNewWindow(self, imagePath):
         # 在新窗口中显示图片

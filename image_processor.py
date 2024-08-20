@@ -1,6 +1,6 @@
 import os
 from PySide6.QtGui import QPixmap, QPainter, QFont, QColor
-from PySide6.QtWidgets import QFileDialog  # 从 PySide6.QtWidgets 导入 QFileDialog
+from PySide6.QtWidgets import QFileDialog
 from datetime import datetime
 
 class ImageProcessor:
@@ -20,13 +20,11 @@ class ImageProcessor:
         # 加载图片为 QPixmap 对象
         return QPixmap(image_path)
 
-    def load_and_save_image(self, parent, image_path):
-        # 打开文件对话框选择图片并保存
-        fileName, _ = QFileDialog.getOpenFileName(parent, 'Open Image', '', 'Image files (*.png *.jpg *.bmp)')
-        if fileName:
-            pixmap = QPixmap(fileName)  # 加载选择的图片
-            self.addWatermark(pixmap)  # 添加水印
-            self.save_pixmap(image_path, pixmap)  # 保存图片
+    def save_uploaded_image(self, image_path, fileName):
+        # 保存上传的图片到指定路径
+        pixmap = QPixmap(fileName)  # 加载选择的图片
+        self.addWatermark(pixmap)  # 添加水印
+        self.save_pixmap(image_path, pixmap)  # 保存图片
 
     def save_pixmap(self, image_path, pixmap):
         # 保存图片到指定路径
