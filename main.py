@@ -8,11 +8,11 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # 设置主窗口标题和默认大小
-        self.setWindowTitle("PySide6 示例")
+        self.setWindowTitle("Test")
         self.setFixedSize(1024, 768)  # 设置固定大小为 1024x768
 
         # 设置背景图片
-        self.set_background_image("beijing")  # 确保图片路径和扩展名正确
+        self.set_background_image("BackImage")  # 确保图片路径和扩展名正确
 
         # 创建菜单栏
         menubar = self.menuBar()
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
 
         # 创建按钮
-        self.create_buttons_from_file("anniu.txt")
+        self.create_buttons_from_file("ButtonName.txt")
 
     def set_background_image(self, image_file):
         # 使用样式表设置背景图片
@@ -95,7 +95,7 @@ class MainWindow(QMainWindow):
 
     def show_about_dialog(self):
         # 显示"关于"对话框
-        QMessageBox.about(self, "关于", "这是一个使用 PySide6 创建的示例程序。")
+        QMessageBox.about(self, "关于", "这是一个测试程序。")
 
     def toggle_button_movement(self):
         # 切换按钮移动开关
@@ -141,7 +141,7 @@ class DraggableButton(QPushButton):
 class SecondaryWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("新窗口")
+        self.setWindowTitle("New")
         self.setFixedSize(1024, 768)  # 设置固定大小为 1024x768
 
 if __name__ == "__main__":
